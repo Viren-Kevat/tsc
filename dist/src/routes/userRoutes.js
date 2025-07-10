@@ -9,4 +9,5 @@ const router = express_1.default.Router();
 router.route("/signup").post(userController_1.signUp);
 router.route("/update/:id").put(userController_1.updateById);
 router.route("/delete/:id").delete(userController_1.deleteById);
+router.route("/find/:id").post(userController_1.findById);
 exports.default = router;

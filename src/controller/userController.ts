@@ -83,5 +83,29 @@ const deleteById = async (req:Request<{id:string},{},{}>,res:Response):Promise<v
     }
 }
 
+const findById = async (req:Request<{id:string},{},{}>,res:Response):Promise<void>=>{
+   try{
+        const {id}=req.params;
+        const srch:User | null = await prisma.user.findFirst({
+            where:{id},
+            select:safeUser
+            
+        })
+        if(!srch){
+            res.status(404).json({error:"user not found"})
+            return
+        }
+        srch.id = undefined;
+    
+        res.status(200).json({
+            srch:srch
+        })
+        console.log(srch);
+        
+   }catch(err){
+    console.log("err : ",err);
+    
+   }
+}
 
-export {signUp,updateById,deleteById};
+export {signUp,updateById,deleteById,findById};

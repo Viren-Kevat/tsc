@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.updateById = exports.signUp = void 0;
+exports.findById = exports.deleteById = exports.updateById = exports.signUp = void 0;
 const index_1 = __importDefault(require("../prisma/index"));
 const cookieToken_js_1 = __importDefault(require("../utils/cookieToken.js"));
 const safeUser = {
@@ -65,3 +65,25 @@ const deleteById = async (req, res) => {
     }
 };
 exports.deleteById = deleteById;
+const findById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const srch = await index_1.default.user.findFirst({
+            where: { id },
+            select: safeUser
+        });
+        if (!srch) {
+            res.status(404).json({ error: "user not found" });
+            return;
+        }
+        srch.id = undefined;
+        res.status(200).json({
+            srch: srch
+        });
+        console.log(srch);
+    }
+    catch (err) {
+        console.log("err : ", err);
+    }
+};
+exports.findById = findById;
